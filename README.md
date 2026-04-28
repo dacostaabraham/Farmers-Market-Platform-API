@@ -1,66 +1,243 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🌱 Farmers Market API — Laravel Backend
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Backend RESTful pour la plateforme de marché agricole (Côte d'Ivoire).  
+Construit avec **Laravel 11**, **PHP 8.2**, **Laravel Sanctum**.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📋 Fonctionnalités
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- ✅ Auth via Sanctum (token-based)
+- ✅ Rôles : Admin → Supervisor → Operator
+- ✅ Catalogue produits avec catégories imbriquées (N niveaux)
+- ✅ Gestion agriculteurs avec limite de crédit
+- ✅ Transactions cash et crédit (intérêt configurable)
+- ✅ Enforcement de limite de crédit
+- ✅ Remboursement FIFO par matière première (cacao, etc.)
+- ✅ Taux de conversion configurable
+- ✅ Seeders avec données réalistes
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🚀 Installation locale (sans Docker)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Prérequis
+- PHP 8.1+
+- Composer
+- MySQL 8.0+
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+# 1. Cloner et installer
+git clone https://github.com/VOTRE_USERNAME/farmers-market-api.git
+cd farmers-market-api
+composer install
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# 2. Configuration
+cp .env.example .env
+php artisan key:generate
 
-## Laravel Sponsors
+# 3. Configurer la base de données dans .env
+# DB_DATABASE=farmers_market
+# DB_USERNAME=root
+# DB_PASSWORD=your_password
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# 4. Migrations + seeding
+php artisan migrate --seed
 
-### Premium Partners
+# 5. Lancer le serveur
+php artisan serve
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+L'API sera disponible sur `http://localhost:8000`
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🐳 Installation avec Docker (recommandé)
 
-## Code of Conduct
+```bash
+git clone https://github.com/VOTRE_USERNAME/farmers-market-api.git
+cd farmers-market-api
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Copier l'env
+cp .env.example .env
 
-## Security Vulnerabilities
+# Démarrer les containers
+docker-compose up -d
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Générer la clé app
+docker-compose exec app php artisan key:generate
 
-## License
+# Migrations + seed
+docker-compose exec app php artisan migrate --seed
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- API : http://localhost:8000
+- phpMyAdmin : http://localhost:8080
+
+---
+
+## 🌐 Déploiement sur Railway (gratuit)
+
+Le fichier `railway.json` et `bootstrap_railway.sh` sont déjà inclus dans ce repo.
+
+### Étapes
+
+**1. Préparer le repo GitHub**
+```bash
+git init
+git add .
+git commit -m "feat: initial commit"
+git remote add origin https://github.com/TON_USERNAME/farmers-market-api.git
+git push -u origin main
+```
+
+**2. Créer le projet Railway**
+- Aller sur [railway.app](https://railway.app) → **New Project**
+- Choisir **Deploy from GitHub repo** → sélectionner `farmers-market-api`
+
+**3. Ajouter MySQL**
+- Dans le projet Railway : **+ Add Service → Database → MySQL**
+- Railway crée automatiquement les variables `MYSQL_HOST`, `MYSQL_PORT`, etc.
+
+**4. Configurer les variables d'environnement**
+
+Dans Railway → ton service Laravel → **Variables** :
+
+| Variable | Valeur |
+|----------|--------|
+| `APP_ENV` | `production` |
+| `APP_KEY` | *(générer localement : `php artisan key:generate --show`)* |
+| `APP_DEBUG` | `false` |
+| `APP_URL` | `https://TON-APP.up.railway.app` |
+| `DB_CONNECTION` | `mysql` |
+| `DB_HOST` | `${{MySQL.MYSQL_HOST}}` |
+| `DB_PORT` | `${{MySQL.MYSQL_PORT}}` |
+| `DB_DATABASE` | `${{MySQL.MYSQL_DATABASE}}` |
+| `DB_USERNAME` | `${{MySQL.MYSQL_USER}}` |
+| `DB_PASSWORD` | `${{MySQL.MYSQL_PASSWORD}}` |
+
+**5. Déployer**
+- Le déploiement se lance automatiquement
+- Le script `bootstrap_railway.sh` : exécute les migrations, seed si première fois, démarre le serveur
+- L'URL publique apparaît dans **Settings → Domains**
+
+**6. Mettre à jour Flutter**
+
+Dans `lib/core/constants/app_constants.dart` :
+```dart
+static const String baseUrl = 'https://TON-APP.up.railway.app/api';
+```
+
+---
+
+## 🔑 Identifiants de test (après seed)
+
+| Rôle | Email | Mot de passe |
+|------|-------|--------------|
+| Admin | admin@farmersmarket.ci | password123 |
+| Supervisor | supervisor@farmersmarket.ci | password123 |
+| Operator | operator@farmersmarket.ci | password123 |
+
+> **Note iOS Simulator** : remplacer `localhost` par `127.0.0.1` dans `AppConstants.baseUrl` du projet Flutter. Ajouter `NSAppTransportSecurity` dans `Info.plist` pour autoriser le HTTP local.
+
+---
+
+## 📡 Endpoints principaux
+
+### Auth
+```
+POST /api/auth/login
+POST /api/auth/logout  [auth]
+GET  /api/auth/me      [auth]
+```
+
+### Utilisateurs
+```
+GET/POST   /api/users/supervisors   [admin]
+GET/PATCH  /api/users/operators     [admin, supervisor]
+```
+
+### Produits & Catégories
+```
+GET    /api/categories/tree           [all]
+GET    /api/categories                [all]
+POST   /api/categories                [admin, supervisor]
+GET    /api/categories/{id}/products  [all]
+GET    /api/products                  [all]
+POST   /api/products                  [admin, supervisor]
+```
+
+### Agriculteurs
+```
+GET    /api/farmers/search?q=...  [all]
+GET    /api/farmers               [all]
+POST   /api/farmers               [all]
+GET    /api/farmers/{id}          [all]
+```
+
+### Transactions
+```
+POST  /api/transactions   [all]
+GET   /api/transactions   [all]
+GET   /api/transactions/{id}
+```
+
+### Dettes & Remboursements
+```
+GET   /api/farmers/{id}/debts
+POST  /api/repayments             [commodity_kg + farmer_id]
+POST  /api/repayments?preview=1   [aperçu conversion avant confirmation]
+```
+
+### Paramètres
+```
+GET  /api/settings           [admin]
+PUT  /api/settings/{key}     [admin]
+```
+
+---
+
+## ⚙️ Paramètres configurables
+
+| Clé | Valeur par défaut | Description |
+|-----|-------------------|-------------|
+| `credit_interest_rate` | 30 | Taux d'intérêt crédit (%) |
+| `commodity_rate_fcfa` | 1000 | Taux de conversion cacao (FCFA/kg) |
+
+---
+
+## 🧠 Logique métier clé
+
+### Crédit
+```
+total = subtotal × (1 + interest_rate / 100)
+```
+
+### Enforcement limite crédit
+```
+if (current_debt + new_credit_total > credit_limit) → BLOCKED (422)
+```
+
+### Remboursement FIFO
+```
+open_debts.orderBy('created_at')
+  → for each debt: apply payment → update remaining_balance
+```
+
+---
+
+## 🗂️ Structure du projet
+```
+app/
+├── Http/
+│   ├── Controllers/   # AuthController, TransactionController, etc.
+│   ├── Middleware/    # CheckRole.php
+│   └── Requests/      # Form validation
+├── Models/            # User, Farmer, Product, Transaction, Debt, Repayment
+└── Services/          # TransactionService, RepaymentService
+database/
+├── migrations/        # 9 migrations
+└── seeders/           # DatabaseSeeder avec données réalistes
+routes/
+└── api.php            # Toutes les routes groupées par rôle
+```
