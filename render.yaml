@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: farmers-market-api
+    runtime: php
+    buildCommand: composer install --no-dev --optimize-autoloader
+    startCommand: bash bootstrap_render.sh
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: false   # ← à remplir manuellement (php artisan key:generate --show)
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: farmers-market-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: farmers-market-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: farmers-market-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: farmers-market-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: farmers-market-db
+          property: password
+
+databases:
+  - name: farmers-market-db
+    databaseName: farmers_market
+    user: farmers_market_user
+    plan: free
